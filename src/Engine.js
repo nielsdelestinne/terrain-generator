@@ -1,5 +1,5 @@
 "use strict";
-var Tile_1 = require("./tiles/Tile");
+var Tile_1 = require("./entities/Tile");
 var Engine = (function () {
     function Engine(canvasId, width, height) {
         if (width === void 0) { width = window.innerWidth; }
