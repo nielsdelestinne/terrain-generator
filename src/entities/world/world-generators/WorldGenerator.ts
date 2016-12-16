@@ -1,6 +1,7 @@
-import Tile from "../Tile";
+import Tile from "../../tiles/Tile";
 import World from "../World";
-
+import Coordinate from "../../tiles/Coordinate";
+import {TileType} from "../../tiles/TileType";
 export abstract class WorldGenerator {
 
     private tiles: Tile[][] = [];
@@ -20,14 +21,14 @@ export abstract class WorldGenerator {
         this.generateWaterTilesForEntireWorld();
         this.addInitialLandTiles();
         this.generateLand();
-        return this.tiles;
+        return this.getTiles();
     }
 
     abstract generateLand();
 
     private generateWaterTilesForEntireWorld(): void {
         for (let xAxis = 0; xAxis < this.world.getAmountOfHorizontalTiles(); xAxis++) {
-            this.tiles[xAxis] = [];
+            this.getTiles()[xAxis] = [];
             for (let yAxis = 0; yAxis < this.world.getAmountOfVerticalTiles(); yAxis++) {
                 this.createWaterTile(xAxis, yAxis);
             }
@@ -35,14 +36,14 @@ export abstract class WorldGenerator {
     }
 
     private createWaterTile(x: number, y: number): void {
-        this.tiles[x][y] = new Tile(x, y, "WATER", false);
+        this.getTiles()[x][y] = new Tile(Coordinate.of(x,y), TileType.WATER);
     }
 
     private addInitialLandTiles(): void {
         for(let amountOfLandTiles = 0; amountOfLandTiles <  this.initialAmountOfLandTiles; amountOfLandTiles++) {
             let x = World.getRandomNumber(0, this.world.getAmountOfHorizontalTiles()-1);
             let y = World.getRandomNumber(0, this.world.getAmountOfVerticalTiles() - 1);
-            this.tiles[x][y] = new Tile(x, y, "LAND", true);
+            this.getTiles()[x][y] = new Tile(Coordinate.of(x, y), TileType.LAND);
         }
     }
 

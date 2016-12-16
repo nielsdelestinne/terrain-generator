@@ -1,7 +1,7 @@
 import {WorldGenerator} from "./WorldGenerator";
-import Tile from "../Tile";
 import World from "../World";
-
+import {TileType} from "../../tiles/TileType";
+import Tile from "../../tiles/Tile";
 export default class MainlandGenerator extends WorldGenerator {
 
     private static readonly INITIAL_AMOUNT_OF_LAND_TILES: number = 100;
@@ -13,9 +13,10 @@ export default class MainlandGenerator extends WorldGenerator {
     generateLand(): void {
         for (let xAxis = 0; xAxis < this.getWorld().getAmountOfHorizontalTiles(); xAxis++) {
             for (let yAxis = 0; yAxis < this.getWorld().getAmountOfVerticalTiles(); yAxis++) {
-                if(this.getTiles()[xAxis][yAxis].isOccupied() && World.getRandomNumber(1, 2) === 2) {
+                if(this.getTiles()[xAxis][yAxis].isOfType(TileType.LAND) && World.getRandomNumber(1, 2) === 2) {
                     let neighbours = this.getWorld().getNeighboursOf(this.getTiles()[xAxis][yAxis], this.getTiles());
-                    neighbours.forEach((tile) => this.getTiles()[tile.getX()][tile.getY()] = new Tile(tile.getX(), tile.getY(), "LAND", true))
+                    neighbours.forEach((tile) => this.getTiles()[tile.getCoordinate().getX()][tile.getCoordinate().getY()]
+                        = new Tile(tile.getCoordinate(), TileType.LAND))
                 }
             }
         }

@@ -1,24 +1,30 @@
-import Tile from "./Tile";
-import {Drawable} from "../Drawable";
+import Tile from "../tiles/Tile";
+import {Drawable} from "../../Drawable";
 import MainlandGenerator from "./world-generators/MainlandGenerator";
 import {WorldGenerator} from "./world-generators/WorldGenerator";
 import IslandsGenerator from "./world-generators/IslandsGenerator";
+import Coordinate from "../tiles/Coordinate";
+import {TileType} from "../tiles/TileType";
+import MouseListener from "../../listeners/MouseListener";
+import {Controllable} from "../../Controllable";
 
-export default class World implements Drawable {
+export default class World implements Drawable, Controllable {
 
     private worldGenerator: WorldGenerator;
     private tiles: Tile[][] = [];
     private width: number;
     private height: number;
     private canvasId;
+    private context;
 
     private static readonly BACKGROUND_COLOUR: string = 'rgba(0, 0, 0, 1.0)';
 
-    constructor(width: number, height: number, canvasId: string) {
+    constructor(width: number, height: number, canvasId: string, context: any) {
         this.width = width;
         this.height = height;
         this.canvasId = canvasId;
-        this.addClickListener();
+        this.context = context;
+        this.registerListeners();
         this.worldGenerator = new MainlandGenerator(this);
         // this.worldGenerator = new IslandsGenerator(this);
         this.tiles = this.worldGenerator.generate();
@@ -52,7 +58,7 @@ export default class World implements Drawable {
     }
 
     getNeighboursWithLandOf(tile: Tile, tiles: Tile[][]): Tile[] {
-        return this.getNeighboursOf(tile, tiles).filter((nb) => nb.isOccupied());
+        return this.getNeighboursOf(tile, tiles).filter((nb) => nb.isOfType(TileType.LAND));
     }
 
     getNeighboursOf(tile: Tile, tiles: Tile[][]): Tile[] {
@@ -71,9 +77,9 @@ export default class World implements Drawable {
             .filter((neighbour) => neighbour !== null);
     }
 
-    private getTileFromTiles(coordinates: any, tiles: Tile[][]): Tile {
-        if(this.hasValidXBounds(coordinates.x) && this.hasValidYbounds(coordinates.y)){
-            return tiles[coordinates.x][coordinates.y];
+    private getTileFromTiles(coordinate: Coordinate, tiles: Tile[][]): Tile {
+        if(this.hasValidXBounds(coordinate.getX()) && this.hasValidYbounds(coordinate.getY())){
+            return tiles[coordinate.getX()][coordinate.getY()];
         } return null;
     }
 
@@ -91,11 +97,16 @@ export default class World implements Drawable {
         return Math.floor(Math.random() * (maxInclusive - minInclusive + 1) + minInclusive);
     }
 
-    private addClickListener() {
-        document.getElementById(this.canvasId).addEventListener('click',(evt) =>{
-            const xTopLeft = Math.floor(evt.clientX / Tile.TILE_DEFAULT_SIZE);
-            const yTopLeft = Math.floor(evt.clientY / Tile.TILE_DEFAULT_SIZE);
-            alert(xTopLeft + ',' + yTopLeft);
-        },false);
+    registerListeners(): void {
+        MouseListener.onClick(this.canvasId, this.onClickCallback());
+    }
+
+    private onClickCallback() {
+        return (event) =>{
+            const xTopLeft = Math.floor(event.clientX / Tile.TILE_DEFAULT_SIZE);
+            const yTopLeft = Math.floor(event.clientY / Tile.TILE_DEFAULT_SIZE);
+            this.tiles[xTopLeft][yTopLeft].setType(TileType.LAND);
+            this.tiles[xTopLeft][yTopLeft].draw(this.context);
+        };
     }
 }

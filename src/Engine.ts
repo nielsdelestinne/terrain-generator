@@ -1,4 +1,4 @@
-import World from "./entities/World";
+import World from "./entities/world/World";
 
 export default class Engine {
 
@@ -11,7 +11,7 @@ export default class Engine {
                 private height: number = window.innerHeight) {
         this.canvas = this.createCanvas();
         this.context = this.canvas.getContext("2d");
-        this.world = new World(width, height, canvasId);
+        this.world = new World(width, height, canvasId, this.context);
         this.world.draw(this.context);
     }
 
