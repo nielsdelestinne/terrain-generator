@@ -54,7 +54,7 @@ export default class Tile implements Drawable {
 
     public setColour(amountOfNeighboursWithLand: number): void {
 
-        if(this.type === "LAND") {
+        if (this.type === "LAND") {
             this.colour = this.landColours[amountOfNeighboursWithLand];
         } else {
             this.colour = this.waterColours[amountOfNeighboursWithLand];
@@ -66,5 +66,37 @@ export default class Tile implements Drawable {
         context.strokeStyle = 'rgba(0,0,0,1.0)';
         context.fillRect(this.xTopLeft * Tile.TILE_DEFAULT_SIZE, this.yTopLeft * Tile.TILE_DEFAULT_SIZE, Tile.TILE_DEFAULT_SIZE, Tile.TILE_DEFAULT_SIZE);
         context.strokeRect(this.xTopLeft * Tile.TILE_DEFAULT_SIZE, this.yTopLeft * Tile.TILE_DEFAULT_SIZE, Tile.TILE_DEFAULT_SIZE, Tile.TILE_DEFAULT_SIZE);
+    }
+
+    getLeftNeighbour(): any {
+        return {'x': this.getX() - 1, 'y': this.getY()};
+    }
+
+    getUpperLeftNeighbour(): any {
+        return {'x': this.getX() - 1, 'y': this.getY() - 1};
+    }
+
+    getBottomLeftNeighbour(): any {
+        return {'x': this.getX() - 1, 'y': this.getY() + 1};
+    }
+
+    getRightNeighbour(): any {
+        return {'x': this.getX() + 1, 'y': this.getY()};
+    }
+
+    getUpperRightNeighbour(): any {
+        return {'x': this.getX() + 1, 'y': this.getY() - 1};
+    }
+
+    getBottomRightNeighbour(): any {
+        return {'x': this.getX() + 1, 'y': this.getY() + 1};
+    }
+
+    getBottomNeighbour(): any {
+        return {'x': this.getX(), 'y': this.getY() + 1};
+    }
+
+    getUpperNeighbour(): any {
+        return {'x': this.getX(), 'y': this.getY() - 1};
     }
 }
