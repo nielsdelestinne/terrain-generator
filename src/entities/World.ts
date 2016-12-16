@@ -8,7 +8,9 @@ export default class World implements Drawable {
     private height: number;
     private canvasId;
 
-    private static readonly BACKGROUND_COLOUR: string = 'rgba(191, 63, 63, 1.0)';
+    private static readonly BACKGROUND_COLOUR: string = 'rgba(0, 0, 0, 1.0)';
+
+    private static readonly INITIAL_AMOUNT_OF_LAND_TILES = 1000;
 
     constructor(width: number, height: number, canvasId: string) {
         this.width = width;
@@ -39,39 +41,52 @@ export default class World implements Drawable {
     private drawTiles(context: any): void {
         for (let xAxis = 0; xAxis < this.getAmountOfHorizontalTiles(); xAxis++) {
             for (let yAxis = 0; yAxis < this.getAmountOfVerticalTiles(); yAxis++) {
+                this.tiles[xAxis][yAxis].setColour(this.getNeighboursWithLandOf(this.tiles[xAxis][yAxis]).length);
                 this.tiles[xAxis][yAxis].draw(context);
             }
         }
     }
 
     private generateWorldContent() {
-        this.addTilesToWorld();
+        this.generateWaterTilesForEntireWorld();
+        this.addInitialLandTiles();
         this.generateLand();
     }
 
-    private addTilesToWorld() {
+    private generateWaterTilesForEntireWorld(): void {
         for (let xAxis = 0; xAxis < this.getAmountOfHorizontalTiles(); xAxis++) {
             this.tiles[xAxis] = [];
             for (let yAxis = 0; yAxis < this.getAmountOfVerticalTiles(); yAxis++) {
-                this.createTile(xAxis, yAxis);
+                this.createWaterTile(xAxis, yAxis);
             }
         }
     }
 
-    private createTile(x: number, y: number) {
-        this.tiles[x][y] = World.getRandomNumber(1, 15) === 5 ? new Tile(x, y, "LAND", true) : new Tile(x, y, "WATER", false);
+    private createWaterTile(x: number, y: number): void {
+        this.tiles[x][y] = new Tile(x, y, "WATER", false);
     }
 
+    private addInitialLandTiles(): void {
+        for(let amountOfLandTiles = 0; amountOfLandTiles <  World.INITIAL_AMOUNT_OF_LAND_TILES; amountOfLandTiles++) {
+            let x = World.getRandomNumber(0, this.getAmountOfHorizontalTiles()-1);
+            let y = World.getRandomNumber(0, this.getAmountOfVerticalTiles() - 1);
+            this.tiles[x][y] = new Tile(x, y, "LAND", true);
+        }
+    }
 
     private generateLand() {
         for (let xAxis = 0; xAxis < this.getAmountOfHorizontalTiles(); xAxis++) {
             for (let yAxis = 0; yAxis < this.getAmountOfVerticalTiles(); yAxis++) {
-                let neighboursWithLand = this.getNeighboursOf(this.tiles[xAxis][yAxis]).filter((nb) => nb.isOccupied());
+                let neighboursWithLand = this.getNeighboursWithLandOf(this.tiles[xAxis][yAxis]);
                 if ((neighboursWithLand.length * neighboursWithLand.length * World.getRandomNumber(1, 10)) > 25) {
                     this.tiles[xAxis][yAxis] = new Tile(xAxis, yAxis, "LAND", true);
                 }
             }
         }
+    }
+
+    private getNeighboursWithLandOf(tile: Tile): Tile[] {
+        return this.getNeighboursOf(tile).filter((nb) => nb.isOccupied());
     }
 
     private getNeighboursOf(tile: Tile): Tile[] {
