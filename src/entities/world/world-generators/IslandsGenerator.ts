@@ -16,7 +16,7 @@ export default class IslandsGenerator extends WorldGenerator {
         for (let xAxis = 0; xAxis < this.getWorld().getAmountOfHorizontalTiles(); xAxis++) {
             for (let yAxis = 0; yAxis < this.getWorld().getAmountOfVerticalTiles(); yAxis++) {
                 let neighboursWithLand = this.getWorld().getNeighboursWithLandOf(this.getTiles()[xAxis][yAxis], this.getTiles());
-                if ((neighboursWithLand.length * neighboursWithLand.length * World.getRandomNumber(1, 10)) > 25) {
+                if ((neighboursWithLand.length * neighboursWithLand.length * World.getSeededRandomNumber(1, 10)) > 25) {
                     this.getTiles()[xAxis][yAxis] = new Tile(Coordinate.of(xAxis, yAxis), TileType.LAND);
                 }
             }

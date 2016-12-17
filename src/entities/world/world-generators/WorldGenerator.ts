@@ -41,8 +41,8 @@ export abstract class WorldGenerator {
 
     private addInitialLandTiles(): void {
         for(let amountOfLandTiles = 0; amountOfLandTiles <  this.initialAmountOfLandTiles; amountOfLandTiles++) {
-            let x = World.getRandomNumber(0, this.world.getAmountOfHorizontalTiles()-1);
-            let y = World.getRandomNumber(0, this.world.getAmountOfVerticalTiles() - 1);
+            let x = World.getSeededRandomNumber(0, this.world.getAmountOfHorizontalTiles()-1);
+            let y = World.getSeededRandomNumber(0, this.world.getAmountOfVerticalTiles() - 1);
             this.getTiles()[x][y] = new Tile(Coordinate.of(x, y), TileType.LAND);
         }
     }

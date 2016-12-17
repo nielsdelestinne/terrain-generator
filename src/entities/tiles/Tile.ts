@@ -4,7 +4,6 @@ import {TileType} from "./TileType";
 
 export default class Tile implements Drawable {
 
-    // public static readonly TILE_DEFAULT_SIZE = 10;
     public static readonly TILE_DEFAULT_SIZE = 15;
 
     private colour: string = 'rgba(127,191,63,1.0)';
