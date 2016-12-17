@@ -1,6 +1,6 @@
 import {Drawable} from "../../Drawable";
 import Coordinate from "./Coordinate";
-import {TileType} from "./TileType";
+import {Terrain} from "./Terrain";
 
 export default class Tile implements Drawable {
 
@@ -29,18 +29,18 @@ export default class Tile implements Drawable {
         "rgba(143, 193, 224, 1)"];
 
     constructor(private coordinate: Coordinate,
-                private type: TileType) {}
+                private type: Terrain) {}
 
-    public getType(): TileType {
+    public getType(): Terrain {
         return this.type;
     }
 
-    public setType(type: TileType): void {
+    public setType(type: Terrain): void {
         this.type = type;
-        this.colour = type === TileType.LAND ? this.landColours[4] : this.waterColours[4];
+        this.colour = type === Terrain.LAND ? this.landColours[4] : this.waterColours[4];
     }
 
-    public isOfType(type: TileType): boolean {
+    public isOfType(type: Terrain): boolean {
         return this.type === type;
     }
 
@@ -49,7 +49,7 @@ export default class Tile implements Drawable {
     }
 
     public setColour(amountOfNeighboursWithLand: number): void {
-        if (this.type === TileType.LAND) {
+        if (this.type === Terrain.LAND) {
             this.colour = this.landColours[amountOfNeighboursWithLand];
         } else {
             this.colour = this.waterColours[amountOfNeighboursWithLand];

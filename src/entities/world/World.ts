@@ -4,7 +4,7 @@ import MainlandGenerator from "./world-generators/MainlandGenerator";
 import {WorldGenerator} from "./world-generators/WorldGenerator";
 import IslandsGenerator from "./world-generators/IslandsGenerator";
 import Coordinate from "../tiles/Coordinate";
-import {TileType} from "../tiles/TileType";
+import {Terrain} from "../tiles/Terrain";
 import MouseListener from "../../listeners/MouseListener";
 import {Controllable} from "../../Controllable";
 import KeyListener from "../../listeners/KeyListener";
@@ -60,7 +60,7 @@ export default class World implements Drawable, Controllable {
     }
 
     getNeighboursWithLandOf(tile: Tile, tiles: Tile[][]): Tile[] {
-        return this.getNeighboursOf(tile, tiles).filter((nb) => nb.isOfType(TileType.LAND));
+        return this.getNeighboursOf(tile, tiles).filter((nb) => nb.isOfType(Terrain.LAND));
     }
 
     getNeighboursOf(tile: Tile, tiles: Tile[][]): Tile[] {
@@ -118,7 +118,7 @@ export default class World implements Drawable, Controllable {
         return (event) => {
             const xTopLeft = Math.floor(event.clientX / Tile.TILE_DEFAULT_SIZE);
             const yTopLeft = Math.floor(event.clientY / Tile.TILE_DEFAULT_SIZE);
-            this.tiles[xTopLeft][yTopLeft].setType(TileType.LAND);
+            this.tiles[xTopLeft][yTopLeft].setType(Terrain.LAND);
             this.tiles[xTopLeft][yTopLeft].draw(this.context);
             console.log(`x: ${xTopLeft}, y: ${yTopLeft}`);
         };
@@ -136,7 +136,7 @@ export default class World implements Drawable, Controllable {
             // const newColumnIndex = this.tiles.length;
             // this.tiles[this.tiles.length] = [];
             // for (let yAxis = 0; yAxis < this.getAmountOfVerticalTiles(); yAxis++) {
-            //     this.tiles[newColumnIndex][yAxis] = new Tile(Coordinate.of(newColumnIndex, yAxis), TileType.WATER);
+            //     this.tiles[newColumnIndex][yAxis] = new Tile(Coordinate.of(newColumnIndex, yAxis), Terrain.WATER);
             // }
             // this.tiles = this.tiles.slice(1);
             // console.log(this.tiles);

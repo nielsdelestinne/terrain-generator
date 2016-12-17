@@ -2,7 +2,7 @@ import {WorldGenerator} from "./WorldGenerator";
 import World from "../World";
 import Tile from "../../tiles/Tile";
 import Coordinate from "../../tiles/Coordinate";
-import {TileType} from "../../tiles/TileType";
+import {Terrain} from "../../tiles/Terrain";
 
 export default class IslandsGenerator extends WorldGenerator {
 
@@ -17,7 +17,7 @@ export default class IslandsGenerator extends WorldGenerator {
             for (let yAxis = 0; yAxis < this.getWorld().getAmountOfVerticalTiles(); yAxis++) {
                 let neighboursWithLand = this.getWorld().getNeighboursWithLandOf(this.getTiles()[xAxis][yAxis], this.getTiles());
                 if ((neighboursWithLand.length * neighboursWithLand.length * World.getSeededRandomNumber(1, 10)) > 25) {
-                    this.getTiles()[xAxis][yAxis] = new Tile(Coordinate.of(xAxis, yAxis), TileType.LAND);
+                    this.getTiles()[xAxis][yAxis] = new Tile(Coordinate.of(xAxis, yAxis), Terrain.LAND);
                 }
             }
         }
