@@ -8,6 +8,7 @@ Usage
 - `npm install`
 - `gulp`
 - open `dist/index.html`
+- url parameters: `&seed=56&type=MAIN&tile=10`
 
 Notes to self
 ---

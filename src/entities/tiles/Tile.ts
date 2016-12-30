@@ -4,9 +4,19 @@ import {Terrain} from "./Terrain";
 
 export default class Tile implements Drawable {
 
-    public static readonly TILE_DEFAULT_SIZE = 15;
+    public static TILE_DEFAULT_SIZE = 15;
 
     private colour: string = 'rgba(127,191,63,1.0)';
+    private structureColours: string[] = [
+        "rgba(145, 65, 27, 1)",
+        "rgba(145, 65, 27, 1)",
+        "rgba(179, 76, 29, 1)",
+        "rgba(179, 76, 29, 1)",
+        "rgba(179, 76, 29, 1)",
+        "rgba(179, 76, 29, 1)",
+        "rgba(179, 76, 29, 1)",
+        "rgba(179, 76, 29, 1)",
+        "rgba(179, 76, 29, 1)"];
     private landColours: string[] = [
         "rgba(180, 178, 49, 1)",
         "rgba(180, 178, 49, 1)",
@@ -37,7 +47,15 @@ export default class Tile implements Drawable {
 
     public setType(type: Terrain): void {
         this.type = type;
-        this.colour = type === Terrain.LAND ? this.landColours[4] : this.waterColours[4];
+        if (this.type === Terrain.LAND) {
+            this.colour = this.landColours[4];
+        }
+        if (this.type === Terrain.STRUCTURE) {
+            this.colour = this.structureColours[4];
+        }
+        if (this.type === Terrain.WATER) {
+            this.colour = this.waterColours[1];
+        }
     }
 
     public isOfType(type: Terrain): boolean {
@@ -51,7 +69,11 @@ export default class Tile implements Drawable {
     public setColour(amountOfNeighboursWithLand: number): void {
         if (this.type === Terrain.LAND) {
             this.colour = this.landColours[amountOfNeighboursWithLand];
-        } else {
+        }
+        if (this.type === Terrain.STRUCTURE) {
+            this.colour = this.structureColours[amountOfNeighboursWithLand];
+        }
+        if (this.type === Terrain.WATER) {
             this.colour = this.waterColours[amountOfNeighboursWithLand];
         }
     }

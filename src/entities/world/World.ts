@@ -18,8 +18,11 @@ export default class World implements Drawable, Controllable {
     private canvasId;
     private context;
 
+    private selectedTerrain: Terrain = Terrain.LAND;
+
     private static readonly BACKGROUND_COLOUR: string = 'rgba(0, 0, 0, 1.0)';
-    private static SEED: number = 5000;
+    public static SEED: number = 5000;
+    public static WORLD_GENERATOR_TYPE: string;
 
     constructor(width: number, height: number, canvasId: string, context: any) {
         this.width = width;
@@ -27,8 +30,7 @@ export default class World implements Drawable, Controllable {
         this.canvasId = canvasId;
         this.context = context;
         this.registerListeners();
-        this.worldGenerator = new MainlandGenerator(this);
-        // this.worldGenerator = new IslandsGenerator(this);
+        this.worldGenerator = World.WORLD_GENERATOR_TYPE == "ISLANDS" ? new IslandsGenerator(this) : new MainlandGenerator(this);
         this.tiles = this.worldGenerator.generate();
     }
 
@@ -118,7 +120,7 @@ export default class World implements Drawable, Controllable {
         return (event) => {
             const xTopLeft = Math.floor(event.clientX / Tile.TILE_DEFAULT_SIZE);
             const yTopLeft = Math.floor(event.clientY / Tile.TILE_DEFAULT_SIZE);
-            this.tiles[xTopLeft][yTopLeft].setType(Terrain.LAND);
+            this.tiles[xTopLeft][yTopLeft].setType(this.selectedTerrain);
             this.tiles[xTopLeft][yTopLeft].draw(this.context);
             console.log(`x: ${xTopLeft}, y: ${yTopLeft}`);
         };
@@ -126,22 +128,7 @@ export default class World implements Drawable, Controllable {
 
     private onArrowRight() {
         return (event) => {
-            // PROBLEEM:
-            // We kunnen de this.tiles posities in de arrays wel aanpassen
-            // achterliggend ,in de state van de tiles blijven wel de oorspronkelijke
-            // coordinaten gebruikt worden: op basis hiervan tekenen we...
-            // bv. na 2x rechts is de tile linksboven x=2, y=0
-
-            // add a new column on the right
-            // const newColumnIndex = this.tiles.length;
-            // this.tiles[this.tiles.length] = [];
-            // for (let yAxis = 0; yAxis < this.getAmountOfVerticalTiles(); yAxis++) {
-            //     this.tiles[newColumnIndex][yAxis] = new Tile(Coordinate.of(newColumnIndex, yAxis), Terrain.WATER);
-            // }
-            // this.tiles = this.tiles.slice(1);
-            // console.log(this.tiles);
-            // this.draw(this.context);
-            console.log("Right");
+            this.selectedTerrain = Terrain.STRUCTURE;
         }
     }
 
@@ -153,13 +140,13 @@ export default class World implements Drawable, Controllable {
 
     private onArrowUp() {
         return (event) => {
-            console.log("Up");
+            this.selectedTerrain = Terrain.LAND;
         }
     }
 
     private onArrowDown() {
         return (event) => {
-            console.log("Down");
+            this.selectedTerrain = Terrain.WATER
         }
     }
 }
