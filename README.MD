@@ -1,7 +1,10 @@
-ND-DEIMOS
+Terrain Generator
 ===
 
-A project by Niels Delestinne
+Generate unique 2D terrains with Terrain Generator.
+- Possiblity to pollish off the result
+- Generation is done by self-devised algorithms
+- An experiment that is somewhat finished :)
 
 Usage
 ---
