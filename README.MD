@@ -2,7 +2,7 @@ Terrain Generator
 ===
 
 Generate unique 2D terrains with Terrain Generator.
-- Possiblity to pollish off the result
+- Possiblity to polish off the result
 - Generation is done by self-devised algorithms
 - An experiment that is somewhat finished :)
 
